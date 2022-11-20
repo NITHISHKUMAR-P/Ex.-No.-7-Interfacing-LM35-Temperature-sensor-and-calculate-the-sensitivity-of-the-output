@@ -319,7 +319,7 @@ Calculation of sensitivity
 ## After Simulation:
 ![2](as.PNG)
 
-![1](as1.PNG)
+![1](dif.PNG)
 ## Layout Circuit Diagram:
 ![image](lay.PNG)
 
