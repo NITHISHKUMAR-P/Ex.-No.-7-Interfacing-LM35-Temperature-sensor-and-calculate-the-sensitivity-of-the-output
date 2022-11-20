@@ -1,18 +1,17 @@
  
-
-
-### Ex. No. :7
-## Date: 
-### Interfacing LM35 Temperature sensor and calculate the sensitivity of the output
-
+# Ex. No. :07  Interfacing LM35 Temperature sensor and calculate the sensitivity of the output:
+## Date: 20/11/2022
+### Name: Nithishkumar P
+### Reg. no.: 212221230070
+ 
 ## Aim: 
 To configure internal ADC for   LPC2148 ARM 7  for interfacing LM35 temperature sensor.
 ## Components required:
 Proteus ISIS professional suite, Kiel μ vision 5 Development environment 
  ![image](https://user-images.githubusercontent.com/36288975/200110365-9e1f8a55-c943-43f1-94de-60003f6308b7.png)
   
-Figure-01 ADC pins in LPC2148 ARM 7 controller 
- ## Theory 
+#### Figure-01 ADC pins in LPC2148 ARM 7 controller 
+ ## Theory:
 Analog to Digital Converter (ADC) is used to convert analog signal into digital form. LPC2148 has two inbuilt 10-bit ADC i.e. ADC0 & ADC1.
 •	ADC0 has 6 channels &ADC1 has 8 channels.
 •	Hence, we can connect 6 distinct types of input analog signals to ADC0 and 8 distinct types of input analog signals to ADC1.
@@ -29,14 +28,14 @@ These are the power and ground pins for ADC. These should be same as VDD & VSS.
 Let’s see the ADC registers which are used to control and monitors the ADC operation.
 Here, we will see ADC0 registers and their configurations. ADC1 has similar registers and can be configured in a similar manner.
  
-ADC0 Registers 
+### ADC0 Registers: 
 1.  AD0CR (ADC0 Control Register)
 •	AD0CR is a 32-bit register.
 •	This register must be written to select the operating mode before A/D conversion can occur.
 •	It is used for selecting channel of ADC, clock frequency for ADC, number of clocks or number of bits in result, start of conversion and few other parameters.
   
   ![image](https://user-images.githubusercontent.com/36288975/200110376-4ff1ebad-b324-4b8f-8797-ea834763ace4.png)
-Figure-02 AD0CR (ADC0 Control Register)
+#### Figure-02 AD0CR (ADC0 Control Register)
 •	Bits 7:0 – SEL
 These bits select ADC0 channel as analog input. In software-controlled mode, only one of these bits should be 1.e.g. bit 7 (10000000) selects AD0.7 channel as analog input.
 •	Bits 15:8 – CLKDIV
@@ -82,8 +81,7 @@ This bit is significant only when the Start field contains 010-111. In these cas
 •	This register contains the ADC’s DONE bit and the result of the most recent A/D conversion.
  ![image](https://user-images.githubusercontent.com/36288975/200110379-2aead4f2-392c-491d-9ec8-1c6b33e4ab1a.png)
 
-
-Figure-03 AD0GDR (ADC0 Global Data Register)
+#### Figure-03 AD0GDR (ADC0 Global Data Register)
 •	Bit 5:0 – RESERVED
 •	Bits 15:6 – RESULT
 When DONE bit is set to 1, this field contains 10-bit ADC result that has a value in the range of 0 (less than or equal to VSSA) to 1023 (greater than or equal to VREF).
@@ -104,7 +102,7 @@ If AD0CR is written while a conversion is still in progress, this bit is set and
 •	Software can write to this register to simultaneously start conversions on both ADC.
  ![image](https://user-images.githubusercontent.com/36288975/200110382-0d5ab0b1-4220-45e0-b87b-aa8351086222.png)
 
-  Figure-04 ADGSR (A/D Global Start Register)
+#### Figure-04 ADGSR (A/D Global Start Register)
 •	BURST (Bit 16), START (Bit <26:24>) & EDGE (Bit 27)
 These bits have same function as in the individual ADC control registers i.e. AD0CR & AD1CR. Only difference is that we can use these function for both ADC commonly from this register.
  
@@ -113,7 +111,7 @@ These bits have same function as in the individual ADC control registers i.e. AD
 •	It allows checking of status of all the A/D channels simultaneously.
 ![image](https://user-images.githubusercontent.com/36288975/200110390-7eb46ad2-5aed-4a5e-8512-f9791e064728.png)
 
-  Figure-05 AD0STAT (ADC0 Status Register)
+#### Figure-05 AD0STAT (ADC0 Status Register)
 •	Bit 7:0 – DONE7:DONE0
 These bits reflect the DONE status flag from the result registers for A/D channel 7 - channel 0.
 •	Bit 15:8 – OVERRUN7:OVERRUN0
@@ -128,7 +126,7 @@ This bit is 1 when any of the individual A/D channel DONE flags is asserted and 
  
  ![image](https://user-images.githubusercontent.com/36288975/200110394-8660725a-083b-43aa-9fb9-b92cb8b7c53d.png)
 
- Figure-06 AD0INTEN (ADC0 Interrupt Enable)
+ #### Figure-06 AD0INTEN (ADC0 Interrupt Enable)
 •	Bit 0 – ADINTEN0
 0 = Completion of a A/D conversion on ADC channel 0 will not generate an interrupt
 1 = Completion of a conversion on ADC channel 0 will generate an interrupt
@@ -143,7 +141,7 @@ This bit is 1 when any of the individual A/D channel DONE flags is asserted and 
 •	They also include flags that indicate when a conversion has been completed and when a conversion overrun has occurred.
 ![image](https://user-images.githubusercontent.com/36288975/200110398-289fff28-16a8-4b5a-a691-d43f8a746acc.png)
 
-  Figure-07 AD0 Data Registers Structure
+#### Figure-07 AD0 Data Registers Structure
 •	Bit 5:0 – RESERVED
 •	Bits 15:6 – RESULT
 When DONE bit is set to 1, this field contains 10-bit ADC result that has a value in the range of 0 (less than or equal to VSSA) to 1023 (greater than or equal to VREF).
@@ -154,17 +152,14 @@ This bit is cleared by reading this register.
 •	Bit 31 – DONE
 This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read.
  
-
-
-Procedure:
+## Procedure:
 Steps for Analog to Digital Conversion
 1.	Configure the ADxCR (ADC Control Register) according to the need of application.
 2.	Start ADC conversion by writing appropriate value to START bits in ADxCR. (Example, writing 001 to START bits of the register 26:24, conversion is started immediately).
 3.	Monitor the DONE bit (bit number 31) of the corresponding ADxDRy (ADC Data Register) till it changes from 0 to 1. This signals completion of conversion. We can also monitor DONE bit of ADGSR or the DONE bit corresponding to the ADC channel in the ADCxSTAT register.
 4.	Read the ADC result from the corresponding ADC Data Register.
 ADxDRy. E.g. AD0DR1 contains ADC result of channel 1 of ADC0.
-
-LM35 :
+### LM35 :
 •	LM35 is a temperature measuring device having an analog output voltage proportional to the temperature.
 •	It provides output voltage in Centigrade (Celsius). It does not require any external calibration circuitry.
 •	The sensitivity of LM35 is 10 mV/degree Celsius. As temperature increases, output voltage also increases.
@@ -186,41 +181,150 @@ Low Self-Heating, 0.08°C in Still Air
 Non-Linearity Only ±¼°C Typical
 Low-Impedance Output, 0.1 Ω for 1-mA Load
  
-
 ![image](https://user-images.githubusercontent.com/36288975/200110416-9cd78fa3-d1d3-45b5-a2e7-0f304bb32cd6.png)
+#### Figure -08 Circuit diagram of interfacing an LM35  with ADC input pin 
 
-Figure -08 Circuit diagram of interfacing an LM35  with ADC input pin 
+## Kiel - Program:
+```
+#include <lpc214x.h>
+#include "LCD.h"
+#include "ADC.h"
+unsigned int val;
+/*void delay_ms(unsigned int count)
+{
+	unsigned int i=0,j=0;
+	for(j=0;j<count;j++)
+	{
+		for(i=0;i<count;i++);
+	}
+}*/
+int main()
+{
+	IO1DIR = 0xffffffff;
+	IO0DIR = 0x00000000;
+	PINSEL0 = 0x0300;
+	VPBDIV = 0x02;
+	lcd_init();
+	show(" ADC Value:");
+	while(1)
+	{
+		cmd(0x8b);
+		//delay_ms(1000);
+		val=adc(0,6);
+		dat((val/1000)+48);
+		dat(((val/100)%10)+48);
+		dat(((val/10)%10)+48);
+		dat((val%10)+48);
+	}
+}
+```
+### LCD.h
+```
+//lcd.h
+#define bit(x) (1<<x)
 
-## Kiel - Program 
- 
-## Tabulations and graph 
+void lcd_init(void);
+void cmd(unsigned char a);
+void dat(unsigned char b);
+void show(unsigned char *s);
+void lcd_delay(void);
+
+void lcd_init()
+{
+	cmd(0x38);
+	cmd(0x0e);
+	cmd(0x01);
+	cmd(0x06);
+	cmd(0x0c);
+	cmd(0x80);
+}
+
+void cmd(unsigned char a)
+{
+	IO1CLR=0xFF070000;
+	IO1SET=(a<<24);
+	IO1CLR=bit(16);				//rs=0
+	IO1CLR=bit(17);				//rw=0
+	IO1SET=bit(18);			  	//en=1
+	lcd_delay();
+	IO1CLR=bit(18);			   	//en=0
+}
+
+void dat(unsigned char b)
+{
+	IO1CLR=0xFF070000;
+	IO1SET=(b<<24);
+	IO1SET=bit(16);				//rs=1
+	IO1CLR=bit(17);				//rw=0
+	IO1SET=bit(18);			   	//en=1
+	lcd_delay();
+	IO1CLR=bit(18);			   	//en=0
+}
+
+void show(unsigned char *s)
+{
+	while(*s) {
+		dat(*s++);
+	}
+}
+
+void lcd_delay()
+{
+	unsigned int i;
+	for(i=0;i<=3000;i++);
+}
+```
+### ADC.h
+```
+//adc.h
+unsigned int val;
+unsigned int adc(int,int);
+
+
+
+unsigned int adc(int no,int ch)
+{
+	switch(no)									  //select adc
+	{
+		case 0:	AD0CR=0x00200600|(1<<ch);		  //select channel
+				AD0CR|=(1<<24);				  //start conversion
+				while((AD0GDR& (1<<31))==0);
+				val=AD0GDR;
+				break;
+
+		case 1:	AD1CR=0x00200600|(1<<ch);		  //select channel
+				AD1CR|=(1<<24);				  //start conversion
+				while((AD1GDR&(1<<31))==0);
+				val=AD1GDR;
+				break;
+	}
+	val=(val >> 6) & 0x03FF; 					 // bit 6:15 is 10 bit AD value
+
+	return val;
+}
+```
+## Tabulations and graph: 
 Calculation of sensitivity 
 % of sensitivity is   S=  (T2-T1)/(A2-A1)*100
 
+![image](https://user-images.githubusercontent.com/94164665/200111024-3d0b7c52-eff1-4b2f-b1a6-83ff9c284b28.png)
+![33](https://user-images.githubusercontent.com/94164665/200111499-7b6eab29-d5d8-492d-b33f-a828ac8e90c8.jpg)
 
 
-
-SL NO	Temperature value in °C (T)	ADC VALUE (A)	Sensitivity 
-1			-
-2			
-3			
-4			
-5			
-6			
-7			
-8			
-9			
-10			
-
-
- 
-Figure -09 graph between temperature values and ADC output 
-
-
-## Result :
-Temperature sensor LM35 is interfaced to LPC2148 and its output is measured 
+#### Figure -09 graph between temperature values and ADC output 
 
 ## Output screen shots :
+## Before Simulation:
+![00](bs.PNG)
+## After Simulation:
+![2](as.PNG)
+
+![1](as1.PNG)
+## Layout Circuit Diagram:
+![image](lay.PNG)
+
+## Result :
+Temperature sensor LM35 is interfaced to LPC2148 and its output is measured.
 
 
 
